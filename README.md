@@ -176,7 +176,7 @@ go test ./...
 go vet ./...
 go run ./cmd/vcrace verify --seed 42 --cases 1000 --max-events 30
 go test ./internal/scenario -fuzz=FuzzGraphAgreement -fuzztime=10s
-go test ./internal/scenario -bench=. -benchmem
+go test ./internal/scenario '-bench=.' -benchmem
 ```
 
 Tests cover hand-calculated clocks, immutable snapshots, invalid schedules,
