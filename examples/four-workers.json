@@ -1,0 +1,16 @@
+{
+  "name": "four-workers-mixed-synchronization",
+  "workers": 4,
+  "operations": [
+    {"id": "lock-0", "worker": 0, "kind": "acquire", "resource": "mu", "wall_ns": 0},
+    {"id": "write-0", "worker": 0, "kind": "write", "resource": "x", "wall_ns": 1},
+    {"id": "unlock-0", "worker": 0, "kind": "release", "resource": "mu", "wall_ns": 2},
+    {"id": "lock-1", "worker": 1, "kind": "acquire", "resource": "mu", "wall_ns": -5},
+    {"id": "read-1", "worker": 1, "kind": "read", "resource": "x", "wall_ns": -4},
+    {"id": "unlock-1", "worker": 1, "kind": "release", "resource": "mu", "wall_ns": -3},
+    {"id": "send-1", "worker": 1, "kind": "send", "message": "ready", "wall_ns": -2},
+    {"id": "receive-2", "worker": 2, "kind": "receive", "message": "ready", "wall_ns": -10},
+    {"id": "read-2", "worker": 2, "kind": "read", "resource": "x", "wall_ns": -9},
+    {"id": "write-3", "worker": 3, "kind": "write", "resource": "x", "wall_ns": 9999999}
+  ]
+}

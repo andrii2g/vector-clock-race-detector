@@ -1,0 +1,10 @@
+{
+  "name": "message-passing-from-file",
+  "workers": 2,
+  "operations": [
+    {"id": "write-x", "worker": 0, "kind": "write", "resource": "x", "wall_ns": 9000000},
+    {"id": "send-ready", "worker": 0, "kind": "send", "message": "ready", "wall_ns": 10000000},
+    {"id": "receive-ready", "worker": 1, "kind": "receive", "message": "ready", "wall_ns": 1000000},
+    {"id": "read-x", "worker": 1, "kind": "read", "resource": "x", "wall_ns": 2000000}
+  ]
+}
