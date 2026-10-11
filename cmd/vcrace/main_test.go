@@ -82,3 +82,41 @@ func TestCommands(t *testing.T) {
 		}
 	}
 }
+
+func TestInputCannotBeOverwritten(t *testing.T) {
+	dir := t.TempDir()
+	path := filepath.Join(dir, "trace.json")
+	fixture := []byte(`{"name":"source","workers":2,"operations":[]}`)
+	if err := os.WriteFile(path, fixture, 0600); err != nil {
+		t.Fatal(err)
+	}
+	var out bytes.Buffer
+	if err := run([]string{"run", "--input", path, "--out", dir}, &out); err == nil {
+		t.Fatal("would overwrite source fixture")
+	}
+	got, err := os.ReadFile(path)
+	if err != nil || !bytes.Equal(got, fixture) {
+		t.Fatal("fixture was changed")
+	}
+}
+
+func TestShippedFixtures(t *testing.T) {
+	for name, want := range map[string]int{"message-passing": 0, "four-workers": 3} {
+		dir := t.TempDir()
+		var out bytes.Buffer
+		if err := run([]string{"run", "--input", filepath.Join("..", "..", "examples", name+".json"), "--out", dir}, &out); err != nil {
+			t.Fatal(err)
+		}
+		data, err := os.ReadFile(filepath.Join(dir, "report.json"))
+		if err != nil {
+			t.Fatal(err)
+		}
+		var r model.Report
+		if err = json.Unmarshal(data, &r); err != nil {
+			t.Fatal(err)
+		}
+		if !r.Verified || r.DetectedRaces != want {
+			t.Fatal(name, r.DetectedRaces)
+		}
+	}
+}

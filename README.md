@@ -30,7 +30,8 @@ Open `artifacts/demo/diagram.svg` in a browser. Each `run` writes:
 | `report.json` | Race pairs, all event-pair comparisons, detector metrics, verification status |
 | `diagram.svg` | Standalone space-time diagram with causal arrows and race connectors |
 
-Existing output files are replaced. Invalid histories fail before creating output.
+Existing output files are replaced, except when doing so would overwrite the input
+fixture. Invalid histories fail before creating output.
 Races are findings (exit code 0); invalid input, verification disagreement, and I/O
 failures return exit code 1. Use `run --help` or `verify --help` for flags.
 

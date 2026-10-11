@@ -131,6 +131,23 @@ func runScenario(args []string, out io.Writer) error {
 	if err != nil {
 		return err
 	}
+	// Refuse to replace the source fixture, including through a hard link or symlink.
+	if *input != "" {
+		source, statErr := os.Stat(*input)
+		if statErr != nil {
+			return statErr
+		}
+		for _, name := range []string{"trace.json", "report.json", "diagram.svg"} {
+			dest := filepath.Join(*dir, name)
+			info, statErr := os.Stat(dest)
+			if statErr != nil && !os.IsNotExist(statErr) {
+				return statErr
+			}
+			if statErr == nil && os.SameFile(source, info) {
+				return fmt.Errorf("output %q would overwrite the input fixture", dest)
+			}
+		}
+	}
 	if len(s.Operations) > maxEvents {
 		return fmt.Errorf("history exceeds %d-event limit", maxEvents)
 	}

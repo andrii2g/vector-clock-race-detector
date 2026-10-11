@@ -77,7 +77,7 @@ func FuzzGraphAgreement(f *testing.F) {
 	})
 }
 
-func BenchmarkDetector(b *testing.B) {
+func BenchmarkDetectionAndPairAnalysis(b *testing.B) {
 	s, _ := scenario.Generate(42, 4, 100)
 	tr, _ := simulator.Run(s)
 	b.ResetTimer()
